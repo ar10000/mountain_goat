@@ -6,6 +6,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
 
+
 store_images = os.path.join(os.environ.get('PATH'), 'labelled_images')
 d_path= "/Users/andrew/code/ar10000/mountain_goat/mountain_goat-body_reco/test_images" # path to directory with images
 
@@ -72,3 +73,4 @@ def pose_rep(d_path):
                             "right_foot" : right_foot
                             }
             return body_keypoints
+
