@@ -5,10 +5,48 @@ import mediapipe as mp
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_pose = mp.solutions.pose
-
+import ipdb
 
 store_images = os.path.join(os.environ.get('PATH'), 'labelled_images')
 d_path= "/Users/andrew/code/ar10000/mountain_goat/mountain_goat-body_reco/test_images" # path to directory with images
+
+
+def get_pose_image(image_path):
+    # ipdb.set_trace()
+    with mp_pose.Pose(
+        static_image_mode=True,
+        model_complexity=1,
+        enable_segmentation=True,
+        min_tracking_confidence = 0.5,
+        min_detection_confidence=0.5) as pose:
+        image = cv2.imread(image_path)
+        image_height, image_width, _ = image.shape
+        # Convert the BGR image to RGB before processing.
+        results = pose.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+        # ipdb.set_trace()
+        if results.pose_landmarks:
+        #here 29, 30, 19, 20 corresponds to (x, y,z, visibility) of that
+        # part of the pose as par mediapipe.solutions.pose docs
+            body_keypoints = {"left_hand_x" : results.pose_landmarks.landmark[19].x,
+                            "left_hand_y":results.pose_landmarks.landmark[19].y,
+                            "left_hand_z":results.pose_landmarks.landmark[19].z,
+                            "left_hand_visibility":results.pose_landmarks.landmark[19].visibility,
+                            "right_hand_x" : results.pose_landmarks.landmark[20].x,
+                            "right_hand_y":results.pose_landmarks.landmark[20].y,
+                            "right_hand_z":results.pose_landmarks.landmark[20].z,
+                            "right_hand_visibility":results.pose_landmarks.landmark[20].visibility,
+                            "left_foot_X" : results.pose_landmarks.landmark[29].x,
+                            "left_foot_y":results.pose_landmarks.landmark[29].y,
+                            "left_foot_z":results.pose_landmarks.landmark[29].z,
+                            "left_foot_visibility":results.pose_landmarks.landmark[29].visibility,
+                            "right_foot_x" : results.pose_landmarks.landmark[30].x,
+                            "right_foot_y":results.pose_landmarks.landmark[30].y,
+                            "right_foot_z":results.pose_landmarks.landmark[30].z,
+                            "right_foot_visibility":results.pose_landmarks.landmark[30].visibility
+                            }
+            return body_keypoints
+        return {'body':"nothing found"}
+
 
 def pose_rep(d_path):
     IMAGE_FILES = []
@@ -74,3 +112,4 @@ def pose_rep(d_path):
                             }
             return body_keypoints
 
+# print(type(get_pose_image('/home/william/code/ar10000/mountain_goat/Screenshot 2022-08-29 at 12.07.37.png')))
