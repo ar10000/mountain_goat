@@ -45,7 +45,26 @@ def get_pose_image(image_path):
                             "right_foot_visibility":results.pose_landmarks.landmark[30].visibility
                             }
             return body_keypoints
-        return {'body':"nothing found"}
+        body_keypoints_nan= {"left_hand_x" : np.nan,
+                "left_hand_y":np.nan,
+                "left_hand_z":np.nan,
+                "left_hand_visibility":np.nan,
+                "right_hand_x" : np.nan,
+                "right_hand_y":np.nan,
+                "right_hand_z":np.nan,
+                "right_hand_visibility":np.nan,
+                "left_foot_X" : np.nan,
+                "left_foot_y":np.nan,
+                "left_foot_z":np.nan,
+                "left_foot_visibility":np.nan,
+                "right_foot_x" : np.nan,
+                "right_foot_y":np.nan,
+                "right_foot_z":np.nan,
+                "right_foot_visibility":np.nan
+                }
+
+
+        return body_keypoints_nan
 
 
 def pose_rep(d_path):
