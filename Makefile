@@ -1,3 +1,6 @@
+#run preprocessing
+preprocessing:
+	@python mountain_goat/preprocessing.py
 # ----------------------------------
 #          INSTALL & TEST
 # ----------------------------------
