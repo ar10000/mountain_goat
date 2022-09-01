@@ -1,4 +1,4 @@
-from termios import VDISCARD
+
 import cv2
 import os, sys
 import numpy as np
