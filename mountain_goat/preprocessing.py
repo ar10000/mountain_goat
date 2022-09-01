@@ -2,9 +2,11 @@
 import cv2
 import os, sys
 import numpy as np
+import pandas as pd
 import mediapipe as mp
-from get_body_coordinates import get_pose_image
+from mountain_goat.get_body_coordinates import get_pose_image
 import ipdb
+import re
 
 def create_dataframe(directory_path):
     """takes in a directory path folder and returns a  dataframe
@@ -26,19 +28,26 @@ def create_dataframe(directory_path):
     for i in os.listdir(directory_path):
         video_path= os.path.join(directory_path, i)
         videos.append(video_path)
-
-    frames_total=[]# this is a list of dictionaries , each dictionary contains (x, y,z, visibility) of a certain body part as in get_pose_image
+    #sort  videos so they are in order
+    videos.sort(key=lambda f: int(re.sub('\D', '', f)))
+    sequences_total=[]# this is a list of dictionaries , each dictionary contains (x, y,z, visibility) of a certain body part as in get_pose_image
     # ipdb.set_trace()
     ## loopig through all paths and generating a dataframe
     for vid_index, video_path in enumerate(videos):# index of videos
-        for frame_index , frame in enumerate(os.listdir(video_path)):
+        videos_sequence=[]
+        #sort the frames so theyre in order
+        subfolder_vid_paths= os.listdir(video_path)
+        subfolder_vid_paths.sort(key=lambda f: int(re.sub('\D', '', f)))
+        framepath_list=[]
+        for frame_index , frame in enumerate(subfolder_vid_paths):
             frame_path = os.path.join(video_path, frame)
+            framepath_list.append(frame_path)
             # print(frame_path) # id of frame in video
             body = get_pose_image(frame_path)
             # print(body)
             body['frame_id']= f'Vid{vid_index}_frame{frame_index}'
-            frames_total.append(body)
-    # ipdb.set_trace()
-    return frames_total
+            videos_sequence.append(body)
+        sequences_total.append(pd.DataFrame(videos_sequence))
+    return sequences_total
 
-# print(create_dataframe('/home/william/code/ar10000/mountain_goat/videos'))
+print(type(create_dataframe('/home/william/code/ar10000/mountain_goat/raw_data/Videos')))

@@ -93,8 +93,8 @@ def pose_rep(d_path):
             results = pose.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
             #print(results)
 
-            #if not results.pose_landmarks: # if there are no coordinates found in images , continue to next image
-            #continue
+            if not results.pose_landmarks: # if there are no coordinates found in images , continue to next image
+                continue
 
             annotated_image = image.copy()## copy of the image
             # draw landmarks
