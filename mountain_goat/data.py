@@ -5,41 +5,37 @@ from google.cloud import storage
 from mountain_goat.params import CREDENTIAL
 import os
 
-
-
-BUCKET_NAME = 'mountain_goat_dataset'
-
-storage_filename_screenshots = "mountain_goat_screenshots" #cloud path
-local_filename_screenshots = "../raw_data/mountain_goat_screenshots" #local path
-storage_filename_ucsd = "mountain_goat_UCSD" #cloud path
-local_filename_ucsd = "../raw_data/mountain_goat_UCSD" #local path
-
 def get_data(data_location, dataset):
     '''
-    data_location values: 'cloud' or 'local'
-    dataset values: 'screenshots' or 'ucsd'
+    This function retrieves the data from the specified source.
+    * data_location values: 'cloud' or 'local'
+    * dataset values: 'screenshots' or 'ucsd'
     '''
+    BUCKET_NAME = 'mountain_goat_dataset'
+
+    cloud_storage_filename_screenshots = "mountain_goat_screenshots"
+    local_storage_filename_screenshots = "../raw_data/mountain_goat_screenshots"
+    cloud_storage_filename_ucsd = "mountain_goat_UCSD"
+    local_storage_filename_ucsd = "../raw_data/mountain_goat_UCSD"
+
     if data_location == 'cloud':
-        client = storage.Client(credentials=CREDENTIAL)
-        bucket = client.bucket(BUCKET_NAME)
+        client = storage.Client(credentials=CREDENTIAL) # >>> Returns:<google.cloud.storage.client.Client object at 0x103f6f8b0>
+        bucket = client.bucket(BUCKET_NAME) # >>> Returns:<Bucket: mountain_goat_dataset>
         if dataset == 'screenshots':
-            blobs = bucket.list_blobs(prefix=storage_filename_screenshots)
+            blobs = bucket.list_blobs(prefix=cloud_storage_filename_screenshots) # >>> Returns:<google.api_core.page_iterator.HTTPIterator object at 0x101004cd0>
             for blob in blobs:
-                #print(blob.name)
-                # blob = bucket.blob(storage_filename_screenshots)
-                print(blob.name)
-                #print(os.getcwd())
                 blob.download_to_filename(f'raw_data/{blob.name}')
+                print(blob.name)
         elif dataset == 'ucsd':
-            blob = bucket.blob(storage_filename_ucsd)
-            blob.download_to_filename(local_filename_ucsd)
+            blob = bucket.blob(cloud_storage_filename_ucsd)
+            blob.download_to_filename(local_storage_filename_ucsd)
     elif data_location == 'local':
         if dataset == 'screenshots':
-            blob = bucket.blob(storage_filename_screenshots)
-            blob.download_to_filename(local_filename_screenshots)
+            blob = bucket.blob(cloud_storage_filename_screenshots)
+            blob.download_to_filename(local_storage_filename_screenshots)
         elif dataset == 'ucsd':
-            blob = bucket.blob(storage_filename_ucsd)
-            blob.download_to_filename(local_filename_ucsd)
+            blob = bucket.blob(cloud_storage_filename_ucsd)
+            blob.download_to_filename(local_storage_filename_ucsd)
 
 ###############################################################################
 #Upload blob
