@@ -50,4 +50,4 @@ def create_dataframe(directory_path):
         sequences_total.append(pd.DataFrame(videos_sequence))
     return sequences_total
 
-print(type(create_dataframe('/home/william/code/ar10000/mountain_goat/raw_data/Videos')))
+# print(type(create_dataframe('/home/william/code/ar10000/mountain_goat/raw_data/Videos')))
