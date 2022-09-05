@@ -12,7 +12,6 @@ d_path= "/Users/andrew/code/ar10000/mountain_goat/mountain_goat-body_reco/test_i
 
 
 def get_pose_image(image_path):
-    # ipdb.set_trace()
     with mp_pose.Pose(
         static_image_mode=True,
         model_complexity=1,
@@ -23,7 +22,6 @@ def get_pose_image(image_path):
         image_height, image_width, _ = image.shape
         # Convert the BGR image to RGB before processing.
         results = pose.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-        # ipdb.set_trace()
         if results.pose_landmarks:
         #here 29, 30, 19, 20 corresponds to (x, y,z, visibility) of that
         # part of the pose as par mediapipe.solutions.pose docs
