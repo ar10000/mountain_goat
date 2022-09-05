@@ -1,35 +1,38 @@
-# packaging
-#pip>=9
-#setuptools>=26
-#twine
-#wheel>=0.29
+# # packaging
+pip>=9
+setuptools>=26
+twine
+wheel>=0.29
 
-# data science
-#numpy
-#pandas
-#scikit-learn
-#torch
-#torchvision
-#git+https://github.com/facebookresearch/detectron2.git
-#tensorflow
+# # data science
+numpy
+pandas
+scikit-learn
+# torch==1.10.0+cu111
+# torchaudio==0.8.1
+# torchvision
+torch==1.8.1
+torchvision==0.9.1
+# git+https://github.com/facebookresearch/detectron2.git
+tensorflow
 
-# tests/linter
-#black
-#coverage
-#flake8
-#pytest
-#yapf
+# # tests/linter
+black
+coverage
+flake8
+pytest
+yapf
 
-# API
-#gcsfs
-#google-cloud-storage
-#mlflow
-#s3fs
-#uvicorn
-#fastapi
+# # API
+gcsfs
+google-cloud-storage
+mlflow
+s3fs
+uvicorn
+fastapi
 
-# utilities
-#six>=1.14
-#joblib
-#memoized-property
-#termcolor
+# # utilities
+six>=1.14
+joblib
+memoized-property
+termcolor
