@@ -127,13 +127,13 @@ def get_grips(image_path, model_path):
     DatasetCatalog.get("train")
     im = cv2.imread(image_path)
     outputs = predictor(im)
-    v = Visualizer(im[:, :, ::-1],
-                    metadata=train_metadata,
-                    scale=0.5,
-                    instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels. This option is only available for segmentation models
-    )
-    out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-    cv2.imshow('', out.get_image()[:, :, ::-1])
+    # v = Visualizer(im[:, :, ::-1],
+    #                 metadata=train_metadata,
+    #                 scale=0.5,
+    #                 instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels. This option is only available for segmentation models
+    # )
+    # out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
+    # cv2.imshow('', out.get_image()[:, :, ::-1])
     return outputs['instances'].pred_boxes.tensor.cpu().numpy()
 
 if __name__ == '__main__':
