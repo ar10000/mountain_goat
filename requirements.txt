@@ -8,6 +8,10 @@ wheel>=0.29
 numpy
 pandas
 scikit-learn
+matplotlib
+opencv-python
+mediapipe
+colorama
 # torch==1.10.0+cu111
 # torchaudio==0.8.1
 # torchvision
@@ -23,7 +27,7 @@ flake8
 pytest
 yapf
 
-# # API
+# API
 gcsfs
 google-cloud-storage
 mlflow

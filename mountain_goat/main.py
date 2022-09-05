@@ -6,8 +6,10 @@ from mountain_goat.preprocessing import create_dataframe
 from mountain_goat.next_move_model import initialize_model, compile_model, train_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import ipdb
+from data import get_data
+from params import RAW_DATA_DIR
 
-list_videos= create_dataframe('/home/william/code/ar10000/mountain_goat/raw_data/Videos')
+# list_videos = create_dataframe('../raw_data/mountain_goat_screenshots')
 
 def check_nan_videos(videos:list) -> pd.DataFrame:
     """takes in list of dataframes and returns a summary of the videos w.r.t the number of nan values"""
@@ -24,7 +26,6 @@ def remove_nan(list_videos:list) -> list:
     """takes in alist of videos and removes nan"""
     list_videos_no_nan=[]
     for df in list_videos:
-        # ipdb.set_trace()
         df.dropna(inplace=True)
         list_videos_no_nan.append(df)
     return list_videos_no_nan
@@ -72,17 +73,32 @@ def preprocess(list_videos) -> np.array:
 
     return X_pad_train, X_pad_test, y_train, y_test
 
-def train_next_move():
+def train():
     """train model """
 
-    if os.environ.get('DATA_SOURCE') == 'local':
-        #if data is locally stored get it here
-        d_path = os.environ.get('LOCAL_PATH_CLIMB')
+    data_location = input("Enter data source (cloud or local): ")
+    dataset = input("Enter dataset to use (screenshots or UCSD): ")
+    get_data(data_location, dataset)
 
-    list_videos = create_dataframe(d_path)
+    local_storage_filename_screenshots = os.path.join(RAW_DATA_DIR, "mountain_goat_screenshots")
+    local_storage_filename_ucsd = os.path.join(RAW_DATA_DIR, "mountain_goat_UCSD")
+
+    if dataset=='screenshots':
+        list_videos = create_dataframe(local_storage_filename_screenshots)
+    elif dataset=='UCSD':
+        list_videos = create_dataframe(local_storage_filename_ucsd)
+
+    # if os.environ.get('DATA_SOURCE') == 'local':
+    #     #if data is locally stored get it here
+    #     d_path = os.environ.get('LOCAL_PATH_CLIMB')
+
+    #list_videos = create_dataframe(d_path)
     X_pad_train, X_pad_test, y_train, y_test = preprocess(list_videos)
     model = initialize_model()
     model = compile_model(model)
     model, history = train_model(model, X_pad_train, y_train)
-#TODO return history somewhere else
-    return model
+
+    return model, history
+
+if __name__ == '__main__':
+    model, history = train()
