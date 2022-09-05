@@ -100,5 +100,15 @@ def train():
 
     return model, history
 
+def pred_next_move(X:np.ndarray)-> np.ndarray:
+    """make prediction  from series of pictires """
+    # load model from cloud
+    model=None
+    # check if something is in cloud
+    if model is None:
+        model , history = train()
+    prediction = model.predict(X)
+    return
+
 if __name__ == '__main__':
     model, history = train()
