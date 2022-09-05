@@ -1,10 +1,10 @@
-# packaging
+# # packaging
 pip>=9
 setuptools>=26
 twine
 wheel>=0.29
 
-# data science
+# # data science
 numpy
 pandas
 scikit-learn
@@ -12,30 +12,30 @@ matplotlib
 opencv-python
 mediapipe
 colorama
-torch
-torchvision
-git+https://github.com/facebookresearch/detectron2.git
+# torch==1.10.0+cu111
+# torchaudio==0.8.1
+# torchvision
+torch==1.8.1
+torchvision==0.9.1
+# git+https://github.com/facebookresearch/detectron2.git
 tensorflow
-# tests/linter
+
+# # tests/linter
 black
 coverage
 flake8
 pytest
 yapf
 
-#MACOS SPECIFIC
-# packaging==21.3
-# pyparsing==3.0.6
-# tensorflow-macos==2.5.0
-# zipp==3.7.0
-
 # API
 gcsfs
 google-cloud-storage
 mlflow
 s3fs
+uvicorn
+fastapi
 
-# utilities
+# # utilities
 six>=1.14
 joblib
 memoized-property
