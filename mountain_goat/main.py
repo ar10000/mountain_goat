@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 import matplotlib.pyplot as plt
+from mountain_goat import grip_detection
 from mountain_goat.get_body_coordinates import get_pose_image
 from mountain_goat.grip_detection import get_grips
 from mountain_goat.preprocessing import create_dataframe
@@ -103,7 +104,8 @@ def train():
     return model, history
 
 def pred_next_move(X:np.ndarray)-> np.ndarray:
-    """make prediction  from series of pictires """
+    """make prediction  from series of pictires
+    Should take as input array of body coordinates but also array of grip coordinates"""
     # load model from cloud
     model=None
     # check if something is in cloud
@@ -124,13 +126,40 @@ def pred_next_move(X:np.ndarray)-> np.ndarray:
     #given coordinates of person return the closest grip coordinates of that colorw
 
 def next_position_gripless(seq_frames_folder):
+    #user won't upload a folder but info on all 3 images
+    # images will probably be in bytes form
+
+
+    # 1. Getting body coordinates
     coords_frames = []
     for frame in seq_frames_folder:
         coords_frames.append(get_pose_image(frame))
         #! get_pose_image returns a dic but we need array of arrays
-    next_move_coords = pred_next_move(coords_frames)
 
-    coords_all_grips = get_grips(image_path, model_path)
+    # 2. Getting grip coordinates
+    coords_all_grips = grip_detection(image, model_path)
+
+    # 3. ColoUrs
+    """
+    for coordinates C in 4 members_coordinates, if C +- epsilon is in grip_coordinates.
+    create new list, append(color_coordinates) to list.
+    We would ideally have 1 list(dic). Otherwise create a list per colour and return colour coordinates of longest.
+    """
+
+    # 4. Predicting next_move
+    next_move_coords = pred_next_move(coords_frames)
+    """
+    Add colored holds as constraints. Output coordinates of next position.
+    """
+
+    # 5. Preparing output image
+    """
+    Get_grips returns an array with coordinates of boxes around grip position.
+    make sure we also have body position.
+    Convert back to bytes.
+    """
+
+
     # check what body part moved with next move --> biggest difference (x+y+z)
     # check closest grip --> smallest difference between coordinates of member M sith all grips
     # convert that body part's position to coordinates of closest grip

@@ -11,7 +11,7 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from PIL import Image
-from grip_detection import get_grips
+from mountain_goat.grip_detection import get_grips
 
 
 
@@ -47,10 +47,13 @@ def test(file: bytes = File(...)):
     image_file = io.BytesIO(file_decoded) # File is in memory >> No need to "open" it
 
     # Opening the file in memory as an image and transforming it
+
+    # USE CV2.IMREAD INSTEAD OF PIL
+    
     image = Image.open(image_file)  # Opening the file as an image
     new_image = image.rotate(90)    # Creating a new rotated image
     # new_image = grip_detection.get_grips(image, ....)   # Careful: image is an image here, not a path to an image
-    model_path = 'raw_data/output/model_final.pth'
+    model_path = 'models_output/grip_detection/model_final.pth'
     prediction = get_grips(image, model_path)
     print(prediction)
 
