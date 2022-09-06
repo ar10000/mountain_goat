@@ -107,8 +107,10 @@ def pred_next_move(X:np.ndarray)-> np.ndarray:
     # check if something is in cloud
     if model is None:
         model , history = train()
+
+    #TODO if we have time make cosine similarity function
     prediction = model.predict(X)
-    return
+    return prediction
 
 if __name__ == '__main__':
     model, history = train()
