@@ -35,6 +35,7 @@ mlflow
 s3fs
 uvicorn
 fastapi
+python-multipart
 
 # # utilities
 six>=1.14
