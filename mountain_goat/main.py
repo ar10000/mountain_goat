@@ -100,5 +100,17 @@ def train():
 
     return model, history
 
+def pred_next_move(X:np.ndarray)-> np.ndarray:
+    """make prediction  from series of pictires """
+    # load model from cloud
+    model=None
+    # check if something is in cloud
+    if model is None:
+        model , history = train()
+
+    #TODO if we have time make cosine similarity function
+    prediction = model.predict(X)
+    return prediction
+
 if __name__ == '__main__':
     model, history = train()

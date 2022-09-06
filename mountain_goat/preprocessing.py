@@ -48,6 +48,6 @@ def create_dataframe(directory_path):
                 body['frame_id']= f'Vid{vid_index}_frame{frame_index}'
                 videos_sequence.append(body)
             except:
-                breakpoint()
+                 breakpoint()
         sequences_total.append(pd.DataFrame(videos_sequence))
     return sequences_total
