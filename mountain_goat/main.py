@@ -3,6 +3,7 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 from mountain_goat.get_body_coordinates import get_pose_image
+from mountain_goat.grip_detection import get_grips
 from mountain_goat.preprocessing import create_dataframe
 from mountain_goat.next_move_model import initialize_model, compile_model, train_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
@@ -114,13 +115,37 @@ def pred_next_move(X:np.ndarray)-> np.ndarray:
     return prediction
 
 #def foo(video or list of frames, color):
-    #frames = cosine that splots it in frames
+    #frames = cosine that splots it in frames -- consider 3 pics for now
     #use  get pose image
         #loop that gets coordinates from frames --> RETURNS LIST OF DICTS
     #turn list of dicts into array of arrays --> input to pred_next_move
     #next_move= pred_next_move(frames)
     #coordinates_of all grips = grips coordinates from wall
     #given coordinates of person return the closest grip coordinates of that color
+
+def next_position_gripless(seq_frames_folder):
+    coords_frames = []
+    for frame in seq_frames_folder:
+        coords_frames.append(get_pose_image(frame))
+        #! get_pose_image returns a dic but we need array of arrays
+    next_move_coords = pred_next_move(coords_frames)
+
+    coords_all_grips = get_grips(image_path, model_path)
+    # check what body part moved with next move --> biggest difference (x+y+z)
+    # check closest grip --> smallest difference between coordinates of member M sith all grips
+    # convert that body part's position to coordinates of closest grip
+    # outputs image with new position (mediapipe?)
+
+    im = seq_frames[-1]
+    cfg = get_cfg()
+    predictor = DefaultPredictor(cfg)
+    outputs = predictor(im)
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
