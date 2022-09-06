@@ -130,3 +130,11 @@ dmypy.json
 
 # Credentials
 credentials.json
+
+
+# Other
+models_output/
+.DS_Store
+.envrc
+mountain_goat/preproc_img_improvement/Test_Images/
+raw_data/mountain_goat_screenshots/
