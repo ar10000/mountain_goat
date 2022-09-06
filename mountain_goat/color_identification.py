@@ -5,6 +5,7 @@ import  webcolors
 from mountain_goat.grip_detection import get_grips
 
 def getColorBin(img, tl, br):
+    """gets the color of an image"""
     # Creates mask over image focus
     mask = np.zeros(img.shape[:2], np.uint8)
     mask[tl[1]:br[1], tl[0]:br[0]] = 255
@@ -26,30 +27,31 @@ def getColorBin(img, tl, br):
     return fullColor
 
 def findColors_rgb(img, holds):
-    # If no keypoints return nothing
+    """takes in an image and holds and returns there colors"""
+    # If no holds return nothing
     if len(holds)== 0:
         return []
 
     # # Shift colorspace to HLS
     # hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
 
-    # Preallocate space for color array corresponding to keypoints
+    # Preallocate space for color array corresponding to holds
     colors = np.empty([len(holds),3])
-    for i, key in enumerate(holds):
+    for i, hold in enumerate(holds):
 #         print(i)
-        br = (int(key[2]), int(key[3]))
-        tl = (int(key[0]), int(key[1]))
+        br = (int(hold[2]), int(hold[3]))
+        tl = (int(hold[0]), int(hold[1]))
 #         print(br, tl)
         colors[i] = getColorBin(img,tl,br)
     return colors
 
 def draw_grips(img, holds, colors):
-    for i, key in enumerate(holds):
+    for i, hold in enumerate(holds):
 #         print(i)
-        br = (int(key[2]), int(key[3]))
-        tl = (int(key[0]), int(key[1]))
+        br = (int(hold[2]), int(hold[3]))
+        tl = (int(hold[0]), int(hold[1]))
 #         print(br, tl)
-        cv2.rectangle(img=img,pt1=tl,pt2=br,color=tuple(colors[i]),thickness=2)
+        cv2.rectangle(img=img,pt1=tl,pt2=br,color=tuple(colors[i]),thickness=2)# draw rectangle over grip with respective color
     img = img[...,::-1]
 # Display the resulting frame
     fig = plt.imshow(img)
@@ -57,6 +59,8 @@ def draw_grips(img, holds, colors):
     plt.show()
 
 def closest_colour(requested_colour):
+    """takes in input of rgb values and returns the name
+    of the color that is closest to the requested color"""
     min_colours = {}
     for key, name in webcolors.CSS3_HEX_TO_NAMES.items():
         r_c, g_c, b_c = webcolors.hex_to_rgb(key)

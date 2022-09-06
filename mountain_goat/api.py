@@ -38,5 +38,4 @@ def root():
     #LOAD MODEL
 
     #PREDICT
-
     return {'colour': 'red'}
