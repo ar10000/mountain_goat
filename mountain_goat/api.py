@@ -11,12 +11,7 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from PIL import Image
-# from androguard.core.bytecodes.apk import APK
-#from taxifare.interface.main import pred
-
-#from taxifare.ml_logic.registry import load_model
-#from taxifare.ml_logic.preprocessor import preprocess_features
-
+from grip_detection import get_grips
 
 
 
@@ -55,6 +50,9 @@ def test(file: bytes = File(...)):
     image = Image.open(image_file)  # Opening the file as an image
     new_image = image.rotate(90)    # Creating a new rotated image
     # new_image = grip_detection.get_grips(image, ....)   # Careful: image is an image here, not a path to an image
+    model_path = 'raw_data/output/model_final.pth'
+    prediction = get_grips(image, model_path)
+    print(prediction)
 
     # Saving the rotated image and prepare to send
     new_image_file = io.BytesIO()   # Creating a new empty file in memory to store the image

@@ -100,7 +100,7 @@ def train_detectron2():
 
 #     return outputs['instances'].pred_boxes.tensor.cpu().numpy()
 
-def get_grips(image_path, model_path):
+def get_grips(image, model_path):
     if os.environ.get('DATA_SOURCE')== 'local':
         path_annotations= os.environ.get('LOCAL_PATH_GRIPS_ANNOTATIONS')
         path_grip_train= os.environ.get('LOCAL_PATH_GRIPS')
@@ -125,8 +125,8 @@ def get_grips(image_path, model_path):
     predictor = DefaultPredictor(cfg)
     train_metadata = MetadataCatalog.get("train")
     DatasetCatalog.get("train")
-    im = cv2.imread(image_path)
-    outputs = predictor(im)
+    # image = cv2.imread(image_path)
+    outputs = predictor(image)
     # v = Visualizer(im[:, :, ::-1],
     #                 metadata=train_metadata,
     #                 scale=0.5,
@@ -137,6 +137,7 @@ def get_grips(image_path, model_path):
     return outputs['instances'].pred_boxes.tensor.cpu().numpy()
 
 if __name__ == '__main__':
-    model_path = '/home/william/code/ar10000/mountain_goat/raw_data/output/model_final.pth'
-    image = '/home/william/code/ar10000/mountain_goat/Screenshot 2022-08-29 at 12.07.37.png'
+    model_path = 'raw_data/output/model_final.pth'
+    image_path = 'Screenshot 2022-08-29 at 12.07.37.png'
+    image = cv2.imread(image_path)
     print(get_grips(image, model_path))
