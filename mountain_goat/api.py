@@ -47,20 +47,17 @@ def predict_grip_detection(img_bytes):
 
 @app.post("/test")
 def test(file: bytes = File(...)):
+    # Receiving the bytes, decoding and saving as file in memory
     file_decoded = base64.decodebytes(file)
-    contents = file_decoded
-    print(len(contents))
-    im = Image.open(io.BytesIO(contents))
-    im2 = im.rotate(90)
-    # im2.show()
+    image_file = io.BytesIO(file_decoded) # File is in memory >> No need to "open" it
 
+    # Opening the file in memory as an image and transforming it
+    image = Image.open(image_file)  # Opening the file as an image
+    new_image = image.rotate(90)    # Creating a new rotated image
+    # new_image = grip_detection.get_grips(image, ....)   # Careful: image is an image here, not a path to an image
 
-    # file2 = base64.encodebytes(im2)
-    # bytes_data = file2.getvalue()
-    # print(type(bytes_data))
-    new_img = io.BytesIO()
-    im2.save(new_img, "JPEG")
-    new_img.seek(0)
-
-    return StreamingResponse(new_img, media_type='image/jpeg')
-    # return {"result": bytes_data}
+    # Saving the rotated image and prepare to send
+    new_image_file = io.BytesIO()   # Creating a new empty file in memory to store the image
+    new_image.save(new_image_file, "JPEG")   # Saving the rotated image to the new file in memory
+    new_image_file.seek(0)          # Go to the start of the file before starting to send it as the response
+    return StreamingResponse(new_image_file, media_type='image/jpeg')  # Sending the response
