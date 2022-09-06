@@ -120,7 +120,7 @@ def pred_next_move(X:np.ndarray)-> np.ndarray:
     #turn list of dicts into array of arrays --> input to pred_next_move
     #next_move= pred_next_move(frames)
     #coordinates_of all grips = grips coordinates from wall
-    #given coordinates of person return the closest grip coordinates of that color
+    #given coordinates of person return the closest grip coordinates of that colorw
 
 
 if __name__ == '__main__':
