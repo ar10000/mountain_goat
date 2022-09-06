@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 import matplotlib.pyplot as plt
+from mountain_goat.get_body_coordinates import get_pose_image
 from mountain_goat.preprocessing import create_dataframe
 from mountain_goat.next_move_model import initialize_model, compile_model, train_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
@@ -111,6 +112,16 @@ def pred_next_move(X:np.ndarray)-> np.ndarray:
     #TODO if we have time make cosine similarity function
     prediction = model.predict(X)
     return prediction
+
+#def foo(video or list of frames, color):
+    #frames = cosine that splots it in frames
+    #use  get pose image
+        #loop that gets coordinates from frames --> RETURNS LIST OF DICTS
+    #turn list of dicts into array of arrays --> input to pred_next_move
+    #next_move= pred_next_move(frames)
+    #coordinates_of all grips = grips coordinates from wall
+    #given coordinates of person return the closest grip coordinates of that color
+
 
 if __name__ == '__main__':
     model, history = train()
