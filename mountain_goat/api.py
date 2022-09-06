@@ -25,17 +25,18 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-
-
-# http://127.0.0.1:8000/predict? \
-    # pickup_datetime=2012-10-0612:10:20 \
-        # &pickup_longitude=40.7614327 \
-            # &pickup_latitude=-73.9798156 \
-                # &dropoff_longitude=40.6513111 \
-                    # &dropoff_latitude=-73.8803331 \
-                        # &passenger_count=2
-
-
 @app.get("/")
 def root():
     return {'greeting': 'Hello'}
+
+@app.get("/predict")
+def root():
+    #RECEIVE THE IMAGE FROM THE FRONT END
+
+    #PROCESS THE IMAGE INTO A NP ARRAY
+
+    #LOAD MODEL
+
+    #PREDICT
+
+    return {'colour': 'red'}

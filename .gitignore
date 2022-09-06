@@ -130,3 +130,7 @@ dmypy.json
 
 # Credentials
 credentials.json
+
+
+# Other
+models_output/
