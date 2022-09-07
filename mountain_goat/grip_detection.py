@@ -18,6 +18,8 @@ from detectron2.data import MetadataCatalog, DatasetCatalog
 from detectron2.utils.visualizer import ColorMode
 from detectron2.data.datasets import register_coco_instances
 import ipdb
+from PIL import Image
+
 """
 def train_detectron2():
     '''training detectron2'''
@@ -128,15 +130,20 @@ def get_grips(image, model_path):
     predictor = DefaultPredictor(cfg)
     train_metadata = MetadataCatalog.get("train")
     DatasetCatalog.get("train")
-    #im = cv2.imread(image)
+
     outputs = predictor(image)
-    # v = Visualizer(im[:, :, ::-1],
-    #                  metadata=train_metadata,
-    #                  scale=0.5,
-    #                  instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels. This option is only available for segmentation models
-    # )
-    # out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-    # cv2.imshow('', out.get_image()[:, :, ::-1])
+    cv2.imwrite("temp.jpeg", image)
+    im = cv2.imread("temp.jpeg", flags = 1)
+    cv2.imshow("", im)
+
+    v = Visualizer(im[:, :, ::-1],
+                     metadata=train_metadata,
+                     scale=0.5,
+                     instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels. This option is only available for segmentation models
+    )
+    out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
+    cv2.imshow('', out.get_image()[:, :, ::-1])
+
     return outputs['instances'].pred_boxes.tensor.cpu().numpy()
 
 if __name__ == '__main__':
