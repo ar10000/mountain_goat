@@ -17,8 +17,8 @@ colorama
 # torchvision
 torch==1.8.1
 torchvision==0.9.1
-#git+https://github.com/facebookresearch/detectron2.git
-
+git+https://github.com/facebookresearch/detectron2.git
+Pillow
 tensorflow
 
 # # tests/linter
@@ -36,6 +36,7 @@ s3fs
 uvicorn
 fastapi
 python-multipart
+ipdb
 
 # # utilities
 six>=1.14
