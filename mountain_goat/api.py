@@ -82,12 +82,11 @@ def test(file: bytes = File(...)):
     #new_image = get_grips(image, ....)   # Careful: image is an image here, not a path to an image
     model_path = 'models_output/grip_detection/model_final.pth'
     prediction = get_grips(image, model_path)
-    print(prediction)
 
 
-
+    new_image = Image.open("/Users/andrew/code/ar10000/mountain_goat/temp2.jpeg")
     # Saving the rotated image and prepare to send
     new_image_file = io.BytesIO()   # Creating a new empty file in memory to store the image
-    new_image = save(new_image_file, "JPEG")   # Saving the rotated image to the new file in memory
+    new_image.save(new_image_file, "JPEG")   # Saving the rotated image to the new file in memory
     new_image_file.seek(0)          # Go to the start of the file before starting to send it as the response
     return StreamingResponse(new_image_file, media_type='image/jpeg') # Sending the response
