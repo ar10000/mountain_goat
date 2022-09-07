@@ -138,3 +138,5 @@ models_output/
 .envrc
 mountain_goat/preproc_img_improvement/Test_Images/
 raw_data/
+temp.jpeg
+temp2.jpeg

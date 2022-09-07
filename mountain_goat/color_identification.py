@@ -21,7 +21,6 @@ def getColorBin(img, tl, br):
         [cv2.calcHist([img],[x],mask,[numBins],[0,256])])
         ,[0,1,2])
     binColor= list(binColor)
-#     ipdb.set_trace()
     fullColor = map(lambda x: x * binLen, binColor)
     fullColor =list(fullColor)
     return fullColor
@@ -39,8 +38,8 @@ def findColors_rgb(img, holds):
     colors = np.empty([len(holds),3])
     for i, hold in enumerate(holds):
 #         print(i)
-        br = (int(hold[2]), int(hold[3]))
         tl = (int(hold[0]), int(hold[1]))
+        br = (int(hold[2]), int(hold[3]))
 #         print(br, tl)
         colors[i] = getColorBin(img,tl,br)
     return colors
@@ -48,15 +47,17 @@ def findColors_rgb(img, holds):
 def draw_grips(img, holds, colors):
     for i, hold in enumerate(holds):
 #         print(i)
-        br = (int(hold[2]), int(hold[3]))
         tl = (int(hold[0]), int(hold[1]))
+        br = (int(hold[2]), int(hold[3]))
 #         print(br, tl)
-        cv2.rectangle(img=img,pt1=tl,pt2=br,color=tuple(colors[i]),thickness=2)# draw rectangle over grip with respective color
-    img = img[...,::-1]
+        cv2.rectangle(img=img,pt1=tl,pt2=br,color=tuple(colors[i]),thickness=10)# draw rectangle over grip with respective color
+    # img = img[...,::-1]
+
 # Display the resulting frame
-    fig = plt.imshow(img)
-    plt.title("Image with grips")
-    plt.show()
+    # fig = plt.imshow(img)
+    # plt.title("Image with grips")
+    # plt.show()
+    return img
 
 def closest_colour(requested_colour):
     """takes in input of rgb values and returns the name
@@ -71,23 +72,47 @@ def closest_colour(requested_colour):
 
     return min_colours[min(min_colours.keys())]
 
-def grip_colors(img_path, model_path):
+def grip_colors(im, model_path):
+#     """takes in an image path and model path
+#     returns:
+#     a dictionary of color names and rgb values
+#     and draws the colors on the image as well
+#     """
+#     image = cv2.imread(im)
+#     grips = get_grips(im, model_path)
+#     colors = findColors_rgb(im, grips)
+#     color_names ={}
+#     for color in colors:
+#         name = closest_colour(color)
+#         color_names[name]= color
+#     draw_grips(im, grips, colors)
+#     return color_names
+
+# if __name__ == "__main__":
+#     model_path = 'models_output/grip_detection/model_final.pth'
+#     image_path = 'raw_data/mountain_goat_screenshots/video1/Screenshot (92).png'
+#     im = cv2.imread(image_path)
+#     print(grip_colors(im, model_path=model_path))
+
+
     """takes in an image path and model path
     returns:
     a dictionary of color names and rgb values
     and draws the colors on the image as well
     """
-    image = cv2.imread(img_path)
-    grips = get_grips(img_path, model_path)
-    colors = findColors_rgb(image, grips)
+    # image = cv2.imread(im)
+    grips = get_grips(im, model_path)
+    colors = findColors_rgb(im, grips)
     color_names ={}
     for color in colors:
         name = closest_colour(color)
         color_names[name]= color
-    draw_grips(image, grips, colors)
-    return color_names
+    img = draw_grips(im, grips, colors)
+
+    return img, color_names
 
 if __name__ == "__main__":
-    model_path = '/home/william/code/ar10000/mountain_goat/raw_data/output/model_final.pth'
-    image_path ='/home/william/code/ar10000/mountain_goat/Screenshot 2022-08-29 at 12.07.37.png'
-    print(grip_colors(img_path=image_path, model_path=model_path))
+    model_path = 'models_output/grip_detection/model_final.pth'
+    image_path = 'raw_data/mountain_goat_screenshots/video1/Screenshot (92).png'
+    im = cv2.imread(image_path)
+    print(grip_colors(im, model_path=model_path))
