@@ -109,10 +109,16 @@ def get_grips(image, model_path):
     #     path_grip_train= os.environ.get('LOCAL_PATH_GRIPS')
     #TODO get data also from the cloud
 
-    path_annotations = 'raw_data/mountain_goat_UCSD/hold_detection_dataset/train/_annotations.coco.json'
+    path_annotations = '/Users/andrew/code/ar10000/mountain_goat/raw_data/mountain_goat_UCSD/hold_detection_dataset/train/_annotations.coco.json'
     path_grip_train ='raw_data/mountain_goat_UCSD/hold_detection_dataset/train'
 
-    register_coco_instances("train",{}, path_annotations, path_grip_train)
+    try :
+        train_metadata = MetadataCatalog.get("train")
+        DatasetCatalog.get("train")
+    except:
+        register_coco_instances("train",{}, path_annotations, path_grip_train)
+        train_metadata = MetadataCatalog.get("train")
+        DatasetCatalog.get("train")
     cfg = get_cfg()
     cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml"))
     # /Base-RCNN-C4.yaml
@@ -129,27 +135,25 @@ def get_grips(image, model_path):
     cfg.MODEL.DEVICE='cpu'
 
     predictor = DefaultPredictor(cfg)
-    train_metadata = MetadataCatalog.get("train")
-    DatasetCatalog.get("train")
+
 
     outputs = predictor(image)
     cv2.imwrite("temp.jpeg", image)
-    im = cv2.imread("temp.jpeg", flags = 1)
-    cv2.imshow("", im)
+    im = cv2.imread("temp.jpeg")
 
     v = Visualizer(im[:, :, ::-1],
                      metadata=train_metadata,
                      scale=0.5,
-                     instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels. This option is only available for segmentation models
+                     instance_mode=ColorMode.IMAGE  # remove the colors of unsegmented pixels. This option is only available for segmentation models
     )
     out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-    cv2.imshow('', out.get_image()[:, :, ::-1])
 
-    return outputs['instances'].pred_boxes.tensor.cpu().numpy()
+    cv2.imwrite("temp2.jpeg", out.get_image()[:, :, ::-1])
+    return out
+    # outputs['instances'].pred_boxes.tensor.cpu().numpy()
 
 if __name__ == '__main__':
     model_path = 'models_output/grip_detection/model_final.pth'
-    image_path = 'raw_data/videos/video1/Screenshot (92).png'
+    image_path = '/Users/andrew/code/ar10000/mountain_goat/raw_data/videos/video26/Screenshot (453).png'
     im = cv2.imread(image_path)
     print(get_grips(im, model_path))
-
