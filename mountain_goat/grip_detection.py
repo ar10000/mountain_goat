@@ -20,6 +20,7 @@ from detectron2.data.datasets import register_coco_instances
 import ipdb
 from PIL import Image
 
+
 """
 def train_detectron2():
     '''training detectron2'''
@@ -151,3 +152,4 @@ if __name__ == '__main__':
     image_path = 'raw_data/videos/video1/Screenshot (92).png'
     im = cv2.imread(image_path)
     print(get_grips(im, model_path))
+
