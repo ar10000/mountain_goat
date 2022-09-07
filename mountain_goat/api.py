@@ -1,4 +1,5 @@
 import io
+import cv2
 import base64
 from datetime import datetime
 #from imp import load_compiled
@@ -14,7 +15,6 @@ from PIL import Image
 from mountain_goat.grip_detection import get_grips
 
 
-
 app = FastAPI()
 
 app.add_middleware(
@@ -23,11 +23,12 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
-)
+    )
 
 @app.get("/")
 def root():
     return {'greeting': 'Hello again'}
+
 
 @app.get("/predict_grip_detection")
 def predict_grip_detection(img_bytes):
@@ -38,7 +39,7 @@ def predict_grip_detection(img_bytes):
     #LOAD MODEL
 
     #PREDICT
-    return {'colour': img_bytes}
+
 
 @app.post("/test")
 def test(file: bytes = File(...)):
@@ -48,17 +49,16 @@ def test(file: bytes = File(...)):
 
     # Opening the file in memory as an image and transforming it
 
-    # USE CV2.IMREAD INSTEAD OF PIL
-    
     image = Image.open(image_file)  # Opening the file as an image
     new_image = image.rotate(90)    # Creating a new rotated image
+
     # new_image = grip_detection.get_grips(image, ....)   # Careful: image is an image here, not a path to an image
-    model_path = 'models_output/grip_detection/model_final.pth'
-    prediction = get_grips(image, model_path)
-    print(prediction)
+    #model_path = 'models_output/grip_detection/model_final.pth'
+    #prediction = get_grips(image_file, 'models_output/grip_detection/model_final.pth')
+    #print(prediction)
 
     # Saving the rotated image and prepare to send
     new_image_file = io.BytesIO()   # Creating a new empty file in memory to store the image
     new_image.save(new_image_file, "JPEG")   # Saving the rotated image to the new file in memory
     new_image_file.seek(0)          # Go to the start of the file before starting to send it as the response
-    return StreamingResponse(new_image_file, media_type='image/jpeg')  # Sending the response
+    return StreamingResponse(new_image_file, media_type='image/jpeg') # Sending the response
