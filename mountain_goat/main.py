@@ -13,8 +13,8 @@ from mountain_goat.preprocessing import create_dataframe
 from mountain_goat.next_move_model import initialize_model, compile_model, train_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import ipdb
-# from data import get_data
-# from params import RAW_DATA_DIR
+from data import get_data
+from params import RAW_DATA_DIR
 from tensorflow import keras
 from mountain_goat.color_identification import grip_colors
 
@@ -85,19 +85,19 @@ def preprocess(list_videos) -> np.array:
 def train():
     """train model """
 
-    # data_location = input("Enter data source (cloud or local): ")
-    # dataset = input("Enter dataset to use (screenshots or UCSD): ")
-    # get_data(data_location, dataset)
+    data_location = input("Enter data source (cloud or local): ")
+    dataset = input("Enter dataset to use (screenshots or UCSD): ")
+    get_data(data_location, dataset)
 
-    # local_storage_filename_screenshots = os.path.join(RAW_DATA_DIR, "mountain_goat_screenshots")
-    # local_storage_filename_ucsd = os.path.join(RAW_DATA_DIR, "mountain_goat_UCSD")
+    local_storage_filename_screenshots = os.path.join(RAW_DATA_DIR, "mountain_goat_screenshots")
+    local_storage_filename_ucsd = os.path.join(RAW_DATA_DIR, "mountain_goat_UCSD")
 
-    # if dataset=='screenshots':
-    #     list_videos = create_dataframe(local_storage_filename_screenshots)
-    # elif dataset=='UCSD':
-    #     list_videos = create_dataframe(local_storage_filename_ucsd)
+    if dataset=='screenshots':
+        list_videos = create_dataframe(local_storage_filename_screenshots)
+    elif dataset=='UCSD':
+        list_videos = create_dataframe(local_storage_filename_ucsd)
 
-    list_videos = create_dataframe('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots')
+    # list_videos = create_dataframe('raw_data/mountain_goat_screenshots')
     #list_videos = create_dataframe(d_path)
     X_pad_train, X_pad_test, y_train, y_test = preprocess(list_videos)
     # ipdb.set_trace()
@@ -119,67 +119,17 @@ def pred_next_move(X:np.ndarray)-> np.ndarray:
     prediction = model.predict(X)
     return prediction
 
-#def foo(video or list of frames, color):
-    #frames = cosine that splots it in frames -- consider 3 pics for now
-    #use  get pose image
-        #loop that gets coordinates from frames --> RETURNS LIST OF DICTS
-    #turn list of dicts into array of arrays --> input to pred_next_move
-    #next_move= pred_next_move(frames)
-    #coordinates_of all grips = grips coordinates from wall
-    #given coordinates of person return the closest grip coordinates of that colorw
-
-def next_position_gripless(seq_frames_folder):
-    #user won't upload a folder but info on all 3 images
-    # images will probably be in bytes form
 
 
-    # 1. Getting body coordinates
-    coords_frames = []
-    for frame in seq_frames_folder:
-        coords_frames.append(get_pose_image(frame))
-        #! get_pose_image returns a dic but we need array of arrays
 
-    # 2. Getting grip coordinates
-    coords_all_grips = grip_detection(image, model_path)
-
-    # 3. ColoUrs
-    """
-    for coordinates C in 4 members_coordinates, if C +- epsilon is in grip_coordinates.
-    create new list, append(color_coordinates) to list.
-    We would ideally have 1 list(dic). Otherwise create a list per colour and return colour coordinates of longest.
-    """
-
-    # 4. Predicting next_move
-    next_move_coords = pred_next_move(coords_frames)
-    """
-    Add colored holds as constraints. Output coordinates of next position.
-    """
-
-    # 5. Preparing output image
-    """
-    Get_grips returns an array with coordinates of boxes around grip position.
-    make sure we also have body position.
-    Convert back to bytes.
-    """
-
-
-    # check what body part moved with next move --> biggest difference (x+y+z)
-    # check closest grip --> smallest difference between coordinates of member M sith all grips
-    # convert that body part's position to coordinates of closest grip
-    # outputs image with new position (mediapipe?)
-
-    im = seq_frames[-1]
-    cfg = get_cfg()
-    predictor = DefaultPredictor(cfg)
-    outputs = predictor(im)
 
 def next_position(grip_model , next_move_model, list_frames=0):
-    img1= cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.13.42.png')
-    img2= cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.13.49.png')
-    img3= cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.14.19.png')
-    img4 = cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.14.30.png')
-    img5 = cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.14.42.png')
-    list_frames =[img1, img2, img3, img4, img5]
+    # img1= cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.13.42.png')
+    # img2= cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.13.49.png')
+    # img3= cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.14.19.png')
+    # img4 = cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.14.30.png')
+    # # img5 = cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.14.42.png')
+    # list_frames =[img1, img2, img3, img4]
     """takes in a list of frames and draws the next move """
     frame_1 = list_frames[0]
     # frame_last = img5
@@ -205,7 +155,8 @@ def next_position(grip_model , next_move_model, list_frames=0):
         model.save('next_move_model')
 
     prediction = model.predict(X_pred)
-    image_dim = frame_last.shape
+    # ipdb.set_trace()
+    image_dim = frame_1.shape
     left_hand = int(prediction[0, 0]* image_dim[0]), int(prediction[0, 1]*image_dim[1])
     right_hand = int(prediction[0, 2]* image_dim[0]), int(prediction[0, 3]*image_dim[1])
     left_foot = int(prediction[0, 4]* image_dim[0]), int(prediction[0, 5]*image_dim[1])
@@ -216,7 +167,7 @@ def next_position(grip_model , next_move_model, list_frames=0):
     cv2.circle(img=frame_1, center=tuple(right_hand), radius=100, color=(255, 0, 0), thickness=10)
     cv2.circle(img=frame_1, center=tuple(left_foot), radius=100, color=(0, 255, 0), thickness=10)
     cv2.circle(img=frame_1, center=tuple(right_foot), radius=100, color=(0, 255, 0), thickness=10)
-    frame_1 = frame_1[...,::-1]
+    # frame_1 = frame_1[...,::-1]
 
 # Display the resulting frame
     fig = plt.imshow(frame_1)

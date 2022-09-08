@@ -145,3 +145,9 @@ temp2.jpeg
 Screenshot 2022-08-29 at 12.07.37.png
 Screenshot 2022-08-29 at 12.13.42.png
 Screenshot 2022-08-29 at 12.14.42.png
+#notebooks
+notebooks/color_classification_2.ipynb
+notebooks/preprocessing.ipynb
+
+# model weights
+next_move_model

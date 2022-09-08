@@ -19,7 +19,7 @@ def get_pose_image(image):
         min_tracking_confidence = 0.5,
         min_detection_confidence=0.5) as pose:
         # image = cv2.imread(image_path)
-        image_height, image_width, _ = image.shape
+        # image_height, image_width, _ = image.shape
         # Convert the BGR image to RGB before processing.
         results = pose.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
         if results.pose_landmarks:
