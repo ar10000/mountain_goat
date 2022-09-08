@@ -43,11 +43,13 @@ def create_dataframe(directory_path):
                 frame_path = os.path.join(video_path, frame)
                 framepath_list.append(frame_path)
                 print(f'Creating dataframe for frame {frame_index} out of {len(subfolder_vid_paths)} of video {vid_index} out of {len(videos)}', end='\r')
-                body = get_pose_image(frame_path)
+                im = cv2.imread(frame_path)
+                body = get_pose_image(im)
                 # print(f'body {body}')
                 body['frame_id']= f'Vid{vid_index}_frame{frame_index}'
                 videos_sequence.append(body)
             except:
-                 breakpoint()
+                ipdb.set_trace()
+
         sequences_total.append(pd.DataFrame(videos_sequence))
     return sequences_total

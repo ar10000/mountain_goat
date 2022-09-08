@@ -1,16 +1,22 @@
+from email.mime import image
+from subprocess import list2cmdline
 import pandas as pd
 import numpy as np
 import os
+import cv2
 import matplotlib.pyplot as plt
 from mountain_goat import grip_detection
+from mountain_goat import next_move_model
 from mountain_goat.get_body_coordinates import get_pose_image
 from mountain_goat.grip_detection import get_grips
 from mountain_goat.preprocessing import create_dataframe
 from mountain_goat.next_move_model import initialize_model, compile_model, train_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import ipdb
-from data import get_data
-from params import RAW_DATA_DIR
+# from data import get_data
+# from params import RAW_DATA_DIR
+from tensorflow import keras
+from mountain_goat.color_identification import grip_colors
 
 # list_videos = create_dataframe('../raw_data/mountain_goat_screenshots')
 
@@ -79,28 +85,25 @@ def preprocess(list_videos) -> np.array:
 def train():
     """train model """
 
-    data_location = input("Enter data source (cloud or local): ")
-    dataset = input("Enter dataset to use (screenshots or UCSD): ")
-    get_data(data_location, dataset)
+    # data_location = input("Enter data source (cloud or local): ")
+    # dataset = input("Enter dataset to use (screenshots or UCSD): ")
+    # get_data(data_location, dataset)
 
-    local_storage_filename_screenshots = os.path.join(RAW_DATA_DIR, "mountain_goat_screenshots")
-    local_storage_filename_ucsd = os.path.join(RAW_DATA_DIR, "mountain_goat_UCSD")
+    # local_storage_filename_screenshots = os.path.join(RAW_DATA_DIR, "mountain_goat_screenshots")
+    # local_storage_filename_ucsd = os.path.join(RAW_DATA_DIR, "mountain_goat_UCSD")
 
-    if dataset=='screenshots':
-        list_videos = create_dataframe(local_storage_filename_screenshots)
-    elif dataset=='UCSD':
-        list_videos = create_dataframe(local_storage_filename_ucsd)
+    # if dataset=='screenshots':
+    #     list_videos = create_dataframe(local_storage_filename_screenshots)
+    # elif dataset=='UCSD':
+    #     list_videos = create_dataframe(local_storage_filename_ucsd)
 
-    # if os.environ.get('DATA_SOURCE') == 'local':
-    #     #if data is locally stored get it here
-    #     d_path = os.environ.get('LOCAL_PATH_CLIMB')
-
+    list_videos = create_dataframe('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots')
     #list_videos = create_dataframe(d_path)
     X_pad_train, X_pad_test, y_train, y_test = preprocess(list_videos)
+    # ipdb.set_trace()
     model = initialize_model()
     model = compile_model(model)
     model, history = train_model(model, X_pad_train, y_train)
-
     return model, history
 
 def pred_next_move(X:np.ndarray)-> np.ndarray:
@@ -170,7 +173,58 @@ def next_position_gripless(seq_frames_folder):
     predictor = DefaultPredictor(cfg)
     outputs = predictor(im)
 
+def next_position(grip_model , next_move_model, list_frames=0):
+    img1= cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.13.42.png')
+    img2= cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.13.49.png')
+    img3= cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.14.19.png')
+    img4 = cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.14.30.png')
+    img5 = cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.14.42.png')
+    list_frames =[img1, img2, img3, img4, img5]
+    """takes in a list of frames and draws the next move """
+    frame_1 = list_frames[0]
+    # frame_last = img5
+    frame_coordinates = []
+    for frame in list_frames:
+        body = get_pose_image(frame)
+        frame_coordinates.append(body)
+    frame_coordinates_df = pd.DataFrame(frame_coordinates)
+    shape = frame_coordinates_df.shape
 
+    X= np.ones((25, 8))
+    X= X*-1000
+    X[:shape[0], :]= frame_coordinates_df.to_numpy(dtype='float32')
+    X_pred = np.ones((1, 25, 8))
+    X_pred = X_pred *-1000
+    X_pred[0,:shape[0],:] = frame_coordinates_df.to_numpy(dtype='float32')
+    #load model from storage
+    model= keras.models.load_model(next_move_model)
+
+    # check if something is in cloud
+    if model is None:
+        model , history = train()
+        model.save('next_move_model')
+
+    prediction = model.predict(X_pred)
+    image_dim = frame_last.shape
+    left_hand = int(prediction[0, 0]* image_dim[0]), int(prediction[0, 1]*image_dim[1])
+    right_hand = int(prediction[0, 2]* image_dim[0]), int(prediction[0, 3]*image_dim[1])
+    left_foot = int(prediction[0, 4]* image_dim[0]), int(prediction[0, 5]*image_dim[1])
+    right_foot = int(prediction[0, 6]* image_dim[0]), int(prediction[0, 7]*image_dim[1])
+    # ipdb.set_trace()
+    frame_1 = grip_colors(frame_1, grip_model )[0]
+    cv2.circle(img=frame_1, center=tuple(left_hand), radius=100, color=(255, 0, 0), thickness=10)
+    cv2.circle(img=frame_1, center=tuple(right_hand), radius=100, color=(255, 0, 0), thickness=10)
+    cv2.circle(img=frame_1, center=tuple(left_foot), radius=100, color=(0, 255, 0), thickness=10)
+    cv2.circle(img=frame_1, center=tuple(right_foot), radius=100, color=(0, 255, 0), thickness=10)
+    frame_1 = frame_1[...,::-1]
+
+# Display the resulting frame
+    fig = plt.imshow(frame_1)
+    plt.title("Image with grips")
+    plt.show()
+
+
+    return frame_1
 
 
 
@@ -178,4 +232,7 @@ def next_position_gripless(seq_frames_folder):
 
 
 if __name__ == '__main__':
-    model, history = train()
+    # model, history = train()
+    grip_model = 'raw_data/output/model_final.pth'
+    next_move = 'next_move_model'
+    print(next_position(grip_model, next_move))
