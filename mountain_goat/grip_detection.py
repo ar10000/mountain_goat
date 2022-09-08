@@ -95,8 +95,10 @@ def get_grips(image, model_path):
 #     print(get_grips(im, model_path))
 
 
-    path_annotations = 'raw_data/mountain_goat_UCSD/hold_detection_dataset/train/_annotations.coco.json'
-    path_grip_train ='raw_data/mountain_goat_UCSD/hold_detection_dataset/train'
+    # path_annotations = 'raw_data/mountain_goat_UCSD/hold_detection_dataset/train/_annotations.coco.json'
+    # path_grip_train ='raw_data/mountain_goat_UCSD/hold_detection_dataset/train'
+    path_annotations = '/home/william/code/ar10000/mountain_goat_dataset/UCSD/train/_annotations.coco.json'
+    path_grip_train = '/home/william/code/ar10000/mountain_goat_dataset/UCSD/train'
 
     try :
         train_metadata = MetadataCatalog.get("train")

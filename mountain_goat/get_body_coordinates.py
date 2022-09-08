@@ -11,14 +11,14 @@ store_images = os.path.join(os.environ.get('PATH'), 'labelled_images')
 d_path= "/Users/andrew/code/ar10000/mountain_goat/mountain_goat-body_reco/test_images" # path to directory with images
 
 
-def get_pose_image(image_path):
+def get_pose_image(image):
     with mp_pose.Pose(
         static_image_mode=True,
         model_complexity=1,
         enable_segmentation=True,
         min_tracking_confidence = 0.5,
         min_detection_confidence=0.5) as pose:
-        image = cv2.imread(image_path)
+        # image = cv2.imread(image_path)
         image_height, image_width, _ = image.shape
         # Convert the BGR image to RGB before processing.
         results = pose.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
@@ -27,38 +27,22 @@ def get_pose_image(image_path):
         # part of the pose as par mediapipe.solutions.pose docs
             body_keypoints = {"left_hand_x" : results.pose_landmarks.landmark[19].x,
                             "left_hand_y":results.pose_landmarks.landmark[19].y,
-                            "left_hand_z":results.pose_landmarks.landmark[19].z,
-                            "left_hand_visibility":results.pose_landmarks.landmark[19].visibility,
                             "right_hand_x" : results.pose_landmarks.landmark[20].x,
                             "right_hand_y":results.pose_landmarks.landmark[20].y,
-                            "right_hand_z":results.pose_landmarks.landmark[20].z,
-                            "right_hand_visibility":results.pose_landmarks.landmark[20].visibility,
                             "left_foot_X" : results.pose_landmarks.landmark[29].x,
                             "left_foot_y":results.pose_landmarks.landmark[29].y,
-                            "left_foot_z":results.pose_landmarks.landmark[29].z,
-                            "left_foot_visibility":results.pose_landmarks.landmark[29].visibility,
                             "right_foot_x" : results.pose_landmarks.landmark[30].x,
                             "right_foot_y":results.pose_landmarks.landmark[30].y,
-                            "right_foot_z":results.pose_landmarks.landmark[30].z,
-                            "right_foot_visibility":results.pose_landmarks.landmark[30].visibility
                             }
             return body_keypoints
         body_keypoints_nan= {"left_hand_x" : np.nan,
                 "left_hand_y":np.nan,
-                "left_hand_z":np.nan,
-                "left_hand_visibility":np.nan,
                 "right_hand_x" : np.nan,
                 "right_hand_y":np.nan,
-                "right_hand_z":np.nan,
-                "right_hand_visibility":np.nan,
                 "left_foot_X" : np.nan,
                 "left_foot_y":np.nan,
-                "left_foot_z":np.nan,
-                "left_foot_visibility":np.nan,
                 "right_foot_x" : np.nan,
                 "right_foot_y":np.nan,
-                "right_foot_z":np.nan,
-                "right_foot_visibility":np.nan
                 }
 
 

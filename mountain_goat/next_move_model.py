@@ -11,11 +11,12 @@ def initialize_model() :
     #adding masking layer
     model.add(layers.Masking(mask_value=-1000))
     #adding rnn layers
-    model.add(layers.LSTM(units=20, return_sequences=True, input_shape=(21, 16)))
+    model.add(layers.LSTM(units=20, return_sequences=True))
     model.add(layers.LSTM(units=5, return_sequences=False))
+    model.add(layers.Flatten())
     #adding dense layers
     model.add(layers.Dense(30, activation='relu'))
-    model.add(layers.Dense(16, activation='linear'))
+    model.add(layers.Dense(8, activation='linear'))
 
     print("\n✅ model initialized")
     return model
