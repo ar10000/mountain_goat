@@ -13,8 +13,8 @@ from mountain_goat.preprocessing import create_dataframe
 from mountain_goat.next_move_model import initialize_model, compile_model, train_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import ipdb
-from data import get_data
-from params import RAW_DATA_DIR
+from mountain_goat.data import get_data
+from mountain_goat.params import RAW_DATA_DIR
 from tensorflow import keras
 from mountain_goat.color_identification import grip_colors
 

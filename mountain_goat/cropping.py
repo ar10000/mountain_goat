@@ -2,7 +2,7 @@ import os
 import cv2
 from PIL import Image
 import numpy as np
-import get_body_coordinates
+from mountain_goat import get_body_coordinates
 
 
 def ret():
