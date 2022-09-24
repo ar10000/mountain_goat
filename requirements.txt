@@ -12,6 +12,8 @@ matplotlib
 opencv-python
 mediapipe
 colorama
+seaborn
+scipy
 # torch==1.10.0+cu111
 # torchaudio==0.8.1
 # torchvision
