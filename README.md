@@ -13,4 +13,4 @@
 -We are currently trying to automate the step of getting signifiacant frames from a video(frames where a person is holding a grip i.e every move)
 
 # Install
-Go to `https://github.com/{group}/mountain_goat` to see the project
+Go to `https://github.com/ar10000/mountain_goat` to see the project
