@@ -1,74 +1,20 @@
 # Data analysis
-- Document here the project: mountain_goat
-- Description: Project Description
-- Data Source:
-- Type of analysis:
+-Project: mountain_goat
+- Description: Virtual assistant for inexperienced climbers : when a an amateur climber is stuck on a route
+  we can then recommend a move based on what an experienced climber would do
 
-Please document the project the better you can.
+- Data Source: Youtube Videos of experienced climbers , roboflow for grip dataset
 
-# Startup the project
-
-The initial setup.
-
-Create virtualenv and install the project:
-```bash
-sudo apt-get install virtualenv python-pip python-dev
-deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
-    pip install pip -U; pip install -r requirements.txt
-```
-
-Unittest test:
-```bash
-make clean install test
-```
-
-Check for mountain_goat in gitlab.com/{group}.
-If your project is not set please add it:
-
-- Create a new project on `gitlab.com/{group}/mountain_goat`
-- Then populate it:
-
-```bash
-##   e.g. if group is "{group}" and project_name is "mountain_goat"
-git remote add origin git@github.com:{group}/mountain_goat.git
-git push -u origin master
-git push -u origin --tags
-```
-
-Functionnal test with a script:
-
-```bash
-cd
-mkdir tmp
-cd tmp
-mountain_goat-run
-```
+# Steps followed
+- first ,we built a grip detector to detect all the grips on a climbing wall
+    We used detectron2 for this task and we archieved accuracy of about 93%
+-then we used cv2 to do some color analysis and determine all the colors of the grips
+    We also archieved realtively high accuaracy
+-then we took frames of when an climbing instructor was holding a grip from a video (still trying to automate this step)
+  and trained an LSTM model to predict the next move that a climbing instructor would do
+- we are currently trying to automate the step of getting signifiacant frames from a video(frames where a person is holding
+  a grip i.e every move)
 
 # Install
 
-Go to `https://github.com/{group}/mountain_goat` to see the project, manage issues,
-setup you ssh public key, ...
-
-Create a python3 virtualenv and activate it:
-
-```bash
-sudo apt-get install virtualenv python-pip python-dev
-deactivate; virtualenv -ppython3 ~/venv ; source ~/venv/bin/activate
-```
-
-Clone the project and install it:
-
-```bash
-git clone git@github.com:{group}/mountain_goat.git
-cd mountain_goat
-pip install -r requirements.txt
-make clean install test                # install and test
-```
-Functionnal test with a script:
-
-```bash
-cd
-mkdir tmp
-cd tmp
-mountain_goat-run
-```
+Go to `https://github.com/{group}/mountain_goat` to see the project
