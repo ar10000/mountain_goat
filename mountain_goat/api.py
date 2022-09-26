@@ -32,7 +32,7 @@ app.add_middleware(
 
 @app.get("/")
 def root():
-    return {'greeting': 'Hello again'}
+    return {'Home':'Welcome to home page'}
 
 
 @app.post("/grip_detection")
@@ -135,5 +135,6 @@ def test(list_frames_1: bytes = File(default = None),list_frames_2: bytes = File
     return StreamingResponse(new_image_file, media_type='image/jpeg') # Sending the response
 
 
-    # except:
-    #     return {"Response" : "Not working"}
+@app.post('/pred_move_2')
+def upload_video(file: UploadFile):
+    return {"filename": file.content_type}
