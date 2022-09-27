@@ -131,7 +131,7 @@ def next_position(grip_model , next_move_model, list_frames=0):
     # # img5 = cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.14.42.png')
     # list_frames =[img1, img2, img3, img4]
     """takes in a list of frames and draws the next move """
-    frame_1 = list_frames[0]
+    frame_1 = list_frames[-1]
     # frame_last = img5
     frame_coordinates = []
     for frame in list_frames:

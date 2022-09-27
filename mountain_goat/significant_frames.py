@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import emoji
 from scipy import signal
 import matplotlib.pyplot as plt
 from mountain_goat.get_body_coordinates import get_pose_image
@@ -70,6 +71,8 @@ def get_significant_frames(file_path, resizing_scale=40, show_frames= True):
         dot_product = np. dot(unit_vector_1, unit_vector_2)
         angle = np. arccos(dot_product)
         angles_dict[f'frame{id} vs frame{id +1}'] = angle
+        if id == int(len(resized_frame_list)/2):
+            print(emoji.emojize('######### halfway there still calculating :winking_face: ....'))
 
     #spikes when a climber makes a move , so we need to get the minima
     angles = np.array(list(angles_dict.values()))
