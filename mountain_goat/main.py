@@ -124,12 +124,6 @@ def pred_next_move(X:np.ndarray)-> np.ndarray:
 
 
 def next_position(grip_model , next_move_model, list_frames=0):
-    # img1= cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.13.42.png')
-    # img2= cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.13.49.png')
-    # img3= cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.14.19.png')
-    # img4 = cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.14.30.png')
-    # # img5 = cv2.imread('/home/william/code/ar10000/mountain_goat/raw_data/mountain_goat_screenshots/video106/Screenshot 2022-08-29 at 12.14.42.png')
-    # list_frames =[img1, img2, img3, img4]
     """takes in a list of frames and draws the next move """
     frame_1 = list_frames[-1]
     # frame_last = img5

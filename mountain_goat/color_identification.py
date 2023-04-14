@@ -46,10 +46,9 @@ def findColors_rgb(img, holds):
 
 def draw_grips(img, holds, colors):
     for i, hold in enumerate(holds):
-#         print(i)
         tl = (int(hold[0]), int(hold[1]))
         br = (int(hold[2]), int(hold[3]))
-#         print(br, tl)
+
         cv2.rectangle(img=img,pt1=tl,pt2=br,color=tuple(colors[i]),thickness=10)# draw rectangle over grip with respective color
 #     img = img[...,::-1]
 

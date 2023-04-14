@@ -5,7 +5,6 @@ COPY next_move_model /next_move_model
 COPY raw_data /raw_data
 COPY train /train
 COPY credentials.json /credentials.json
-# RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 RUN pip install git+https://github.com/facebookresearch/detectron2.git
 RUN apt-get update

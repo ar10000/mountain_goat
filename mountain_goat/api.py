@@ -32,59 +32,11 @@ def root():
     return {'Home':'Welcome to home page'}
 
 
-@app.post("/grip_detection")
-def test(file: bytes = File(...)):
-    # Receiving the bytes, decoding and saving as file in memory
-    file_decoded = base64.decodebytes(file)
-
-    # Opening the file in memory, transforming it as an array
-    image_arr = np.asarray(bytearray(file_decoded), dtype = "uint8")
-    # Decoding the array to transform it in a cv2 object
-    image = cv2.imdecode(image_arr, cv2.IMREAD_COLOR)
-
-    # Run the prediction for grip_detection
-    model_path = 'models_output/grip_detection/model_final.pth'
-    prediction = get_grips(image, model_path)
-
-    # We save and open the output from get_grips
-    cv2.imwrite("temp2.jpeg", prediction.get_image()[:, :, ::-1])
-    new_image = Image.open("temp2.jpeg")
-
-    # Code to send back the picture to front-end with
-    new_image_file = io.BytesIO()   # Creating a new empty file in memory to store the image
-    new_image.save(new_image_file, "JPEG")   # Saving the rotated image to the new file in memory
-    new_image_file.seek(0)          # Go to the start of the file before starting to send it as the response
-    return StreamingResponse(new_image_file, media_type='image/jpeg') # Sending the response
-
-@app.post("/colour_grip_detection")
-def test(file: bytes = File(...)):
-    # Receiving the bytes, decoding and saving as file in memory
-    file_decoded = base64.decodebytes(file)
-
-    # Opening the file in memory, transforming it as an array
-    image_arr = np.asarray(bytearray(file_decoded), dtype = "uint8")
-    # Decoding the array to transform it in a cv2 object
-    image = cv2.imdecode(image_arr, cv2.IMREAD_COLOR)
-
-    # Run the prediction for grip_detection
-    model_path = 'models_output/grip_detection/model_final.pth'
-    prediction = grip_colors(image, model_path)[0]
-
-    # We save and open the output from get_grips
-    cv2.imwrite("temp2.jpeg", prediction)
-    new_image = Image.open("temp2.jpeg")
-
-    # Code to send back the picture to front-end with
-    new_image_file = io.BytesIO()   # Creating a new empty file in memory to store the image
-    new_image.save(new_image_file, "JPEG")   # Saving the rotated image to the new file in memory
-    new_image_file.seek(0)          # Go to the start of the file before starting to send it as the response
-    return StreamingResponse(new_image_file, media_type='image/jpeg') # Sending the response
 
 @app.post("/pred_move")
 def test(list_frames_1: bytes = File(default = None),list_frames_2: bytes = File(default = None)
          ,list_frames_3: bytes = File(default = None), list_frames_4: bytes = File(default = None),list_frames_5: bytes = File(default = None),
          list_frames_6: bytes = File(default = None),list_frames_7: bytes = File(default = None)):
-    # try:
 
     print(1)
     list_array_images =[]
